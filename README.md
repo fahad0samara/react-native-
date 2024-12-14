@@ -1,4 +1,4 @@
-# RTL-LTR Expo App | تطبيق إكسبو للغات RTL/LTR
+# RTL-LTR Expo App | تطبيق  للغات RTL/LTR
 
 <div dir="rtl">
 
@@ -18,24 +18,6 @@
 - Expo CLI
 - محاكي iOS (لنظام Mac) أو محاكي Android
 
-## التثبيت
-1. استنساخ المشروع:
-```bash
-git clone https://github.com/yourusername/rtl-ltr-expo-app.git
-cd rtl-ltr-expo-app
-```
-
-2. تثبيت الاعتماديات:
-```bash
-npm install
-# أو
-yarn install
-```
-
-3. تشغيل خادم التطوير:
-```bash
-npx expo start
-```
 
 ## هيكل المشروع
 ```
@@ -66,24 +48,7 @@ A React Native Expo app that supports both Arabic and English languages with ful
 - Expo CLI
 - iOS Simulator (for Mac) or Android Emulator
 
-## Installation
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/rtl-ltr-expo-app.git
-cd rtl-ltr-expo-app
-```
 
-2. Install dependencies:
-```bash
-npm install
-# or
-yarn install
-```
-
-3. Start the development server:
-```bash
-npx expo start
-```
 
 ## Project Structure
 ```
@@ -139,8 +104,5 @@ src/
 
 ## License | الرخصة
 
-<div dir="rtl">
-هذا المشروع مرخص تحت رخصة MIT - راجع ملف LICENSE للتفاصيل.
-</div>
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+
