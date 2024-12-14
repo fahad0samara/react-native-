@@ -1,26 +1,29 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { I18nManager } from 'react-native';
-import en from '../translations/en';
-import ar from '../translations/ar';
+import en from './translations/en.js';
+import ar from './translations/ar.js';
 
-// Initialize i18next
 i18n
   .use(initReactI18next)
   .init({
     compatibilityJSON: 'v3',
     resources: {
-      en,
-      ar,
+      en: {
+        translation: en
+      },
+      ar: {
+        translation: ar
+      }
     },
-    lng: I18nManager.isRTL ? 'ar' : 'en',
+    lng: 'en',
     fallbackLng: 'en',
     interpolation: {
-      escapeValue: false,
+      escapeValue: false
     },
     react: {
-      useSuspense: false,
-    },
+      useSuspense: false
+    }
   });
 
 export default i18n;
