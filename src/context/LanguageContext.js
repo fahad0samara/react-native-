@@ -1,59 +1,59 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { I18nManager } from 'react-native';
-import * as Updates from 'expo-updates';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18n from '../i18n';
 
 const LanguageContext = createContext();
+
+export const useLanguage = () => useContext(LanguageContext);
 
 export const LanguageProvider = ({ children }) => {
   const [language, setLanguage] = useState('en');
   const [isRTL, setIsRTL] = useState(false);
 
   useEffect(() => {
-    loadLanguagePreference();
+    loadSavedLanguage();
   }, []);
 
-  const loadLanguagePreference = async () => {
+  const loadSavedLanguage = async () => {
     try {
       const savedLanguage = await AsyncStorage.getItem('language');
       if (savedLanguage) {
-        setLanguage(savedLanguage);
-        const shouldBeRTL = savedLanguage === 'ar';
-        setIsRTL(shouldBeRTL);
-        I18nManager.allowRTL(shouldBeRTL);
-        I18nManager.forceRTL(shouldBeRTL);
-        await i18n.changeLanguage(savedLanguage);
+        const isRTL = savedLanguage === 'ar';
+        await handleLanguageChange(savedLanguage, isRTL, false);
       }
     } catch (error) {
-      console.error('Error loading language preference:', error);
+      console.error('Error loading saved language:', error);
     }
   };
 
-  const changeLanguage = async (newLanguage) => {
+  const handleLanguageChange = async (newLanguage, isRTL, savePreference = true) => {
     try {
-      const shouldBeRTL = newLanguage === 'ar';
-      
-      // Save the new language preference
-      await AsyncStorage.setItem('language', newLanguage);
-      
+      // Update RTL setting without restarting
+      if (I18nManager.isRTL !== isRTL) {
+        I18nManager.allowRTL(isRTL);
+        I18nManager.forceRTL(isRTL);
+      }
+
       // Update i18n language
       await i18n.changeLanguage(newLanguage);
-      
-      // Update context state
-      setLanguage(newLanguage);
-      setIsRTL(shouldBeRTL);
 
-      // Handle RTL changes
-      if (I18nManager.isRTL !== shouldBeRTL) {
-        I18nManager.allowRTL(shouldBeRTL);
-        I18nManager.forceRTL(shouldBeRTL);
-        // Reload the app to apply RTL changes
-        await Updates.reloadAsync();
+      // Update state
+      setLanguage(newLanguage);
+      setIsRTL(isRTL);
+
+      // Save preference if needed
+      if (savePreference) {
+        await AsyncStorage.setItem('language', newLanguage);
       }
     } catch (error) {
       console.error('Error changing language:', error);
     }
+  };
+
+  const changeLanguage = async (newLanguage) => {
+    const isRTL = newLanguage === 'ar';
+    await handleLanguageChange(newLanguage, isRTL);
   };
 
   return (
@@ -61,12 +61,4 @@ export const LanguageProvider = ({ children }) => {
       {children}
     </LanguageContext.Provider>
   );
-};
-
-export const useLanguage = () => {
-  const context = useContext(LanguageContext);
-  if (!context) {
-    throw new Error('useLanguage must be used within a LanguageProvider');
-  }
-  return context;
 };
